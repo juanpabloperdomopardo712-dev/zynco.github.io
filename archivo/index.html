@@ -1,0 +1,1925 @@
+<!doctype html>
+<html lang="es">
+  <!--═══════════════════════════════════════════════════════════════════════
+      ZYNCO — index.html
+      ───────────────────────────────────────────────────────────────────
+      No se cambió ningún id, class, atributo ni texto: solo se
+      reorganizó la indentación y se agregaron los comentarios de esta
+      sección para que sea más fácil de mantener.
+
+      SE CORRIGIÓ UN ERROR DE ETIQUETAS SIN CERRAR
+      A <div id="panel-admin">, <section id="dashboard">,
+      <main id="principal"> y <section id="contenidoPrincipal"> les
+      faltaban sus etiquetas de cierre. Como nunca se cerraban, el
+      navegador terminaba metiendo <div id="panel-cliente"> (¡todo el
+      panel de cliente!) DENTRO del panel de administrador, y sobraba
+      un </div> extra al final del archivo. Ya se agregaron las
+      etiquetas que faltaban (buscar los comentarios "fin de ..." cerca
+      de la línea 1104 y al final del archivo).
+
+      ESTRUCTURA GENERAL
+      ───────────────────────────────────────────────────────────────────
+      <body>
+        <section id="login">              Pantalla de inicio de sesión
+        <div id="panel-admin">            Panel de administrador (oculto
+          <section id="dashboard">        hasta iniciar sesión como "admin")
+            <aside id="sidebar">            Menú lateral admin
+            <main id="principal">           Título + secciones (data-contenedor)
+        <div id="panel-cliente">          Panel de cliente (oculto hasta
+                                           iniciar sesión como "user"/"usr")
+          <aside id="sidebarUser">          Menú lateral cliente (data-user)
+          <main class="principal">          Título + secciones
+        <footer id="footer">
+        <script src="js/app.js">          Toda la lógica de login,
+                                           navegación y cierre de sesión
+  ═══════════════════════════════════════════════════════════════════════-->
+  <head>
+    <!--==========================================================
+                        CONFIGURACIÓN GENERAL
+    ===========================================================-->
+
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Zynco | Panel Principal</title>
+
+    <meta name="description" content="Sistema de gestión de alquiler de autos y motos Zynco." />
+
+    <link rel="icon" href="img/coche.png" type="image/png" />
+
+    <!--==========================================================
+                        ICONOS
+    ===========================================================-->
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+
+    <!--==========================================================
+                        ESTILOS
+    ===========================================================-->
+
+    <link rel="stylesheet" href="css/styles_zynco.css" />
+  </head>
+
+  <body>
+    <!--==========================================================
+                        LOGIN
+===========================================================-->
+
+    <section id="login">
+      <main class="login-container">
+        <section class="login-card">
+          <!--==============================
+                        LOGO
+            ==============================-->
+
+          <div class="login-logo">
+            <img src="img/logo_zinco.png" alt="Logo Zynco" id="logoLogin" />
+          </div>
+
+          <!--==============================
+                    FORMULARIO LOGIN
+            ==============================-->
+
+          <div class="login-form">
+            <h1>Bienvenido</h1>
+
+            <p>Inicia sesión para administrar Zynco.</p>
+
+            <form id="loginForm">
+              <div class="input-group">
+                <label for="usuario">
+                  <i class="fa-solid fa-user"></i>
+
+                  Usuario
+                </label>
+
+                <input
+                  type="text"
+                  id="usuario"
+                  name="usuario"
+                  placeholder="Ingrese su usuario"
+                  autocomplete="username"
+                  required
+                />
+              </div>
+
+              <div class="input-group">
+                <label for="password">
+                  <i class="fa-solid fa-lock"></i>
+
+                  Contraseña
+                </label>
+
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Ingrese su contraseña"
+                  autocomplete="current-password"
+                  required
+                />
+              </div>
+
+              <button id="btnLogin" class="btn-login" type="submit">
+                <i class="fa-solid fa-right-to-bracket"></i>
+
+                Iniciar sesión
+              </button>
+            </form>
+          </div>
+        </section>
+      </main>
+    </section>
+
+    <!--==========================================================
+                    SISTEMA ZYNCO
+===========================================================-->
+    <div id="panel-admin">
+      <section id="dashboard">
+        <!--==============================
+            MENÚ LATERAL
+    ==============================-->
+
+        <aside class="sidebar" id="sidebar">
+          <!--==========================
+                LOGO
+        ==========================-->
+
+          <div class="sidebar-logo">
+            <img src="img/icon_zynco.png" alt="Logo Zynco" id="logoSidebar" />
+
+            <h2>Zynco</h2>
+          </div>
+
+          <!--==========================
+                MENÚ
+        ==========================-->
+
+          <nav class="sidebar-menu" id="menuPrincipal">
+            <button id="btnInicio" class="menu activo" data-contenedor="inicio">
+              <i class="fa-solid fa-house"></i>
+
+              <span>Inicio</span>
+            </button>
+
+            <button id="btnVehiculos" class="menu" data-contenedor="vehiculos">
+              <i class="fa-solid fa-car"></i>
+
+              <span>Vehículos</span>
+            </button>
+
+            <button id="btnReservas" class="menu" data-contenedor="reservas">
+              <i class="fa-solid fa-calendar-check"></i>
+
+              <span>Reservas</span>
+            </button>
+
+            <button id="btnClientes" class="menu" data-contenedor="clientes">
+              <i class="fa-solid fa-users"></i>
+
+              <span>Clientes</span>
+            </button>
+
+            <button id="btnPagos" class="menu" data-contenedor="pagos">
+              <i class="fa-solid fa-credit-card"></i>
+
+              <span>Pagos</span>
+            </button>
+
+            <button id="btnReportes" class="menu" data-contenedor="reportes">
+              <i class="fa-solid fa-chart-line"></i>
+
+              <span>Reportes</span>
+            </button>
+
+            <button id="btnConfiguracion" class="menu" data-contenedor="configuracion">
+              <i class="fa-solid fa-gear"></i>
+
+              <span>Configuración</span>
+            </button>
+          </nav>
+
+          <!--==========================
+            CERRAR SESIÓN
+        ==========================-->
+
+          <button id="cerrarSesion" class="cerrar-sesion">
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            <span> Cerrar sesión </span>
+          </button>
+        </aside>
+
+        <!--==========================================================
+                    CONTENIDO PRINCIPAL
+    ===========================================================-->
+
+        <main class="principal" id="principal">
+          <!--======================================================
+                        CABECERA
+        ======================================================-->
+
+          <header class="header" id="header">
+            <div class="header-left">
+              <h1 id="tituloPagina">Inicio</h1>
+            </div>
+
+            <div class="usuario" id="usuarioActual">
+              <i class="fa-solid fa-user"></i>
+
+              <span> Administrador </span>
+            </div>
+          </header>
+
+          <!--======================================================
+                    BARRA DE HERRAMIENTAS
+        ======================================================-->
+
+          <section class="toolbar" id="toolbar">
+            <!--
+                Este espacio queda preparado para:
+
+                - Buscador
+                - Botón Nuevo
+                - Exportar
+                - Filtros
+                - Acciones rápidas
+
+                No eliminar.
+            -->
+          </section>
+
+          <!--======================================================
+                    CONTENIDO GENERAL
+        ======================================================-->
+
+          <section class="contenido" id="contenidoPrincipal">
+            <!--==================================================
+                            INICIO
+            ==================================================-->
+
+            <section class="contenedor activo" id="inicio">
+              <div class="page-header">
+                <!-- Título del módulo -->
+                <h2>Panel de Control / Inicio</h2>
+                <p style="color: var(--texto2)">
+                  Bienvenido al sistema de administración de Zynco. Aquí tienes un resumen general
+                  de la plataforma.
+                </p>
+              </div>
+
+              <div class="page-body">
+                <!-- Dashboard -->
+
+                <!-- Tarjetas de Estadísticas / Resumen en miniatura -->
+                <div class="estadisticas" style="margin-top: 20px">
+                  <!-- Resumen de Vehículos -->
+                  <div class="estadistica">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 15px;
+                      "
+                    >
+                      <h3 style="font-size: 16px; color: var(--texto2); margin: 0">Vehículos</h3>
+                      <i class="fa-solid fa-car" style="font-size: 20px; color: var(--azul)"></i>
+                    </div>
+                    <h2>24</h2>
+                    <p style="font-size: 13px; margin-bottom: 15px">
+                      Total registrados (Disponibles y en alquiler)
+                    </p>
+                    <button
+                      class="btn"
+                      style="width: 100%; padding: 10px; font-size: 13px"
+                      onclick="cambiarSeccion('vehiculos')"
+                    >
+                      Ver Vehículos
+                    </button>
+                  </div>
+
+                  <!-- Resumen de Reservas -->
+                  <div class="estadistica">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 15px;
+                      "
+                    >
+                      <h3 style="font-size: 16px; color: var(--texto2); margin: 0">Reservas</h3>
+                      <i
+                        class="fa-solid fa-calendar-days"
+                        style="font-size: 20px; color: var(--dorado)"
+                      ></i>
+                    </div>
+                    <h2>12</h2>
+                    <p style="font-size: 13px; margin-bottom: 15px">
+                      Reservas activas para esta semana
+                    </p>
+                    <button
+                      class="btn"
+                      style="width: 100%; padding: 10px; font-size: 13px"
+                      onclick="cambiarSeccion('reservas')"
+                    >
+                      Ver Reservas
+                    </button>
+                  </div>
+
+                  <!-- Resumen de Clientes -->
+                  <div class="estadistica">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 15px;
+                      "
+                    >
+                      <h3 style="font-size: 16px; color: var(--texto2); margin: 0">Clientes</h3>
+                      <i class="fa-solid fa-users" style="font-size: 20px; color: var(--verde)"></i>
+                    </div>
+                    <h2>48</h2>
+                    <p style="font-size: 13px; margin-bottom: 15px">
+                      Usuarios registrados en la plataforma
+                    </p>
+                    <button
+                      class="btn"
+                      style="width: 100%; padding: 10px; font-size: 13px"
+                      onclick="cambiarSeccion('clientes')"
+                    >
+                      Ver Clientes
+                    </button>
+                  </div>
+
+                  <!-- Resumen de Pagos -->
+                  <div class="estadistica">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 15px;
+                      "
+                    >
+                      <h3 style="font-size: 16px; color: var(--texto2); margin: 0">Pagos</h3>
+                      <i
+                        class="fa-solid fa-wallet"
+                        style="font-size: 20px; color: var(--verde)"
+                      ></i>
+                    </div>
+                    <h2>$3,450</h2>
+                    <p style="font-size: 13px; margin-bottom: 15px">
+                      Ingresos totales recaudados este mes
+                    </p>
+                    <button
+                      class="btn"
+                      style="width: 100%; padding: 10px; font-size: 13px"
+                      onclick="cambiarSeccion('pagos')"
+                    >
+                      Ver Pagos
+                    </button>
+                  </div>
+
+                  <!-- Resumen de Reportes -->
+                  <div class="estadistica">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 15px;
+                      "
+                    >
+                      <h3 style="font-size: 16px; color: var(--texto2); margin: 0">Reportes</h3>
+                      <i
+                        class="fa-solid fa-chart-pie"
+                        style="font-size: 20px; color: var(--rojo)"
+                      ></i>
+                    </div>
+                    <h2 style="font-size: 24px; margin-bottom: 10px">General</h2>
+                    <p style="font-size: 13px; margin-bottom: 15px">
+                      Análisis de rendimiento y estadísticas
+                    </p>
+                    <button
+                      class="btn"
+                      style="width: 100%; padding: 10px; font-size: 13px"
+                      onclick="cambiarSeccion('reportes')"
+                    >
+                      Ver Reportes
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Sección inferior de acciones rápidas usando la clase .card del CSS -->
+                <div style="margin-top: 35px" class="card">
+                  <h3 style="margin-bottom: 15px; color: var(--texto)">Acciones Rápidas</h3>
+                  <p style="color: var(--texto2); font-size: 14px; margin-bottom: 20px">
+                    Utiliza estos accesos directos para gestionar las operaciones más frecuentes del
+                    sistema de alquiler.
+                  </p>
+                  <div style="display: flex; gap: 15px; flex-wrap: wrap">
+                    <button class="btn btn-verde" onclick="cambiarSeccion('vehiculos')">
+                      <i class="fa-solid fa-plus"></i> Registrar Vehículo
+                    </button>
+                    <button class="btn" onclick="cambiarSeccion('reservas')">
+                      <i class="fa-solid fa-calendar-plus"></i> Nueva Reserva
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!--==================================================
+                        VEHÍCULOS
+            ==================================================-->
+
+            <section class="contenedor" id="vehiculos">
+              <!--==============================
+            TÍTULO
+    ==============================-->
+
+              <div class="page-header">
+                <h2>Gestión de Vehículos</h2>
+              </div>
+
+              <!--==============================
+            FORMULARIO
+    ==============================-->
+
+              <div class="formulario-crud">
+                <div class="grupo-formulario">
+                  <div class="campo">
+                    <label>Placa</label>
+
+                    <input type="text" id="placa" placeholder="ABC123" />
+                  </div>
+
+                  <div class="campo">
+                    <label>Marca</label>
+
+                    <input type="text" id="marca" placeholder="Mazda" />
+                  </div>
+
+                  <div class="campo">
+                    <label>Modelo</label>
+
+                    <input type="text" id="modelo" placeholder="Mazda 3" />
+                  </div>
+
+                  <div class="campo">
+                    <label>Año</label>
+
+                    <input type="number" id="anio" min="1980" max="2035" placeholder="2025" />
+                  </div>
+
+                  <div class="campo">
+                    <label>Color</label>
+
+                    <input type="text" id="color" placeholder="Negro" />
+                  </div>
+
+                  <div class="campo">
+                    <label>Tipo</label>
+
+                    <select id="tipo">
+                      <option>Carro</option>
+
+                      <option>Moto</option>
+                    </select>
+                  </div>
+
+                  <div class="campo">
+                    <label>Precio por día</label>
+
+                    <input type="number" id="precio" placeholder="150000" />
+                  </div>
+                </div>
+
+                <div class="botones-formulario">
+                  <button id="btnRegistrarVehiculo" class="btn-registrar">
+                    Registrar vehículo
+                  </button>
+                </div>
+              </div>
+
+              <!--==============================
+            TABLA
+    ==============================-->
+
+              <div class="page-body">
+                <div class="tabla-contenedor">
+                  <table class="tabla-zynco">
+                    <thead>
+                      <tr>
+                        <th>Placa</th>
+
+                        <th>Marca</th>
+
+                        <th>Modelo</th>
+
+                        <th>Año</th>
+
+                        <th>Tipo</th>
+
+                        <th>Estado</th>
+
+                        <th>Precio</th>
+
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="tablaVehiculos">
+                      <tr>
+                        <td>ABC123</td>
+
+                        <td>Mazda</td>
+
+                        <td>3 Touring</td>
+
+                        <td>2025</td>
+
+                        <td>Carro</td>
+
+                        <td>
+                          <span class="estado disponible"> Disponible </span>
+                        </td>
+
+                        <td>$150.000</td>
+
+                        <td>
+                          <button class="btn-editar">
+                            <i class="fa-solid fa-pen"></i>
+                          </button>
+
+                          <button class="btn-eliminar">
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>XYZ456</td>
+
+                        <td>Yamaha</td>
+
+                        <td>FZ25</td>
+
+                        <td>2024</td>
+
+                        <td>Moto</td>
+
+                        <td>
+                          <span class="estado alquilado"> Alquilado </span>
+                        </td>
+
+                        <td>$80.000</td>
+
+                        <td>
+                          <button class="btn-editar">
+                            <i class="fa-solid fa-pen"></i>
+                          </button>
+
+                          <button class="btn-eliminar">
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+            <!--==================================================
+                        RESERVAS
+            ==================================================-->
+
+            <section class="contenedor" id="reservas">
+              <div class="page-header">
+                <h2>Administración de Reservas</h2>
+
+                <div class="busqueda-crud">
+                  <input
+                    type="text"
+                    id="buscarReserva"
+                    placeholder="Buscar por cliente, vehículo o estado..."
+                  />
+
+                  <button class="btn-buscar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    Buscar
+                  </button>
+                </div>
+              </div>
+
+              <div class="page-body">
+                <div class="tabla-contenedor">
+                  <table class="tabla-zynco">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+
+                        <th>Cliente</th>
+
+                        <th>Vehículo</th>
+
+                        <th>Entrega</th>
+
+                        <th>Devolución</th>
+
+                        <th>Valor</th>
+
+                        <th>Estado</th>
+
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="tablaReservas">
+                      <tr>
+                        <td>001</td>
+
+                        <td>Juan Pérez</td>
+
+                        <td>Mazda 3</td>
+
+                        <td>20/07/2026</td>
+
+                        <td>23/07/2026</td>
+
+                        <td>$540.000</td>
+
+                        <td>
+                          <span class="estado disponible"> Activa </span>
+                        </td>
+
+                        <td>
+                          <button class="btn-ver" title="Ver">
+                            <i class="fa-solid fa-eye"></i>
+                          </button>
+
+                          <button class="btn-editar" title="Editar">
+                            <i class="fa-solid fa-pen"></i>
+                          </button>
+
+                          <button class="btn-eliminar" title="Cancelar">
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>002</td>
+
+                        <td>María Gómez</td>
+
+                        <td>Kia Picanto</td>
+
+                        <td>24/07/2026</td>
+
+                        <td>26/07/2026</td>
+
+                        <td>$360.000</td>
+
+                        <td>
+                          <span class="estado mantenimiento"> Pendiente </span>
+                        </td>
+
+                        <td>
+                          <button class="btn-ver" title="Ver">
+                            <i class="fa-solid fa-eye"></i>
+                          </button>
+
+                          <button class="btn-editar" title="Editar">
+                            <i class="fa-solid fa-pen"></i>
+                          </button>
+
+                          <button class="btn-eliminar" title="Cancelar">
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <!--==================================================
+                        CLIENTES
+            ==================================================-->
+
+            <section class="contenedor" id="clientes">
+              <div class="page-header">
+                <h2>Administración de Clientes</h2>
+
+                <div class="busqueda-crud">
+                  <input
+                    type="text"
+                    id="buscarCliente"
+                    placeholder="Buscar por documento, nombre o correo..."
+                  />
+
+                  <button class="btn-buscar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    Buscar
+                  </button>
+                </div>
+              </div>
+
+              <div class="page-body">
+                <div class="tabla-contenedor">
+                  <table class="tabla-zynco">
+                    <thead>
+                      <tr>
+                        <th>Documento</th>
+
+                        <th>Nombre</th>
+
+                        <th>Correo</th>
+
+                        <th>Teléfono</th>
+
+                        <th>Estado</th>
+
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="tablaClientes">
+                      <tr>
+                        <td>1078123456</td>
+
+                        <td>Juan Pérez</td>
+
+                        <td>juan@email.com</td>
+
+                        <td>3001234567</td>
+
+                        <td>
+                          <span class="estado disponible"> Activo </span>
+                        </td>
+
+                        <td>
+                          <button class="btn-editar" title="Editar">
+                            <i class="fa-solid fa-pen"></i>
+                          </button>
+
+                          <button class="btn-ver" title="Ver información">
+                            <i class="fa-solid fa-eye"></i>
+                          </button>
+
+                          <button class="btn-eliminar" title="Desactivar">
+                            <i class="fa-solid fa-user-slash"></i>
+                          </button>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>1000987654</td>
+
+                        <td>María Gómez</td>
+
+                        <td>maria@email.com</td>
+
+                        <td>3209876543</td>
+
+                        <td>
+                          <span class="estado disponible"> Activo </span>
+                        </td>
+
+                        <td>
+                          <button class="btn-editar" title="Editar">
+                            <i class="fa-solid fa-pen"></i>
+                          </button>
+
+                          <button class="btn-ver" title="Ver información">
+                            <i class="fa-solid fa-eye"></i>
+                          </button>
+
+                          <button class="btn-eliminar" title="Desactivar">
+                            <i class="fa-solid fa-user-slash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <!--==================================================
+                        PAGOS
+            ==================================================-->
+
+            <section class="contenedor" id="pagos">
+              <div class="page-header">
+                <h2>Administración de Pagos</h2>
+
+                <div class="busqueda-crud">
+                  <input
+                    type="text"
+                    id="buscarPago"
+                    placeholder="Buscar por cliente, reserva o método de pago..."
+                  />
+
+                  <button class="btn-buscar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    Buscar
+                  </button>
+                </div>
+              </div>
+
+              <div class="page-body">
+                <div class="tabla-contenedor">
+                  <table class="tabla-zynco">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+
+                        <th>Cliente</th>
+
+                        <th>Reserva</th>
+
+                        <th>Fecha</th>
+
+                        <th>Método</th>
+
+                        <th>Valor</th>
+
+                        <th>Estado</th>
+
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="tablaPagos">
+                      <tr>
+                        <td>P001</td>
+
+                        <td>Juan Pérez</td>
+
+                        <td>R001</td>
+
+                        <td>20/07/2026</td>
+
+                        <td>Tarjeta</td>
+
+                        <td>$540.000</td>
+
+                        <td>
+                          <span class="estado disponible"> Pagado </span>
+                        </td>
+
+                        <td>
+                          <button class="btn-ver" title="Ver comprobante">
+                            <i class="fa-solid fa-eye"></i>
+                          </button>
+
+                          <button class="btn-editar" title="Confirmar">
+                            <i class="fa-solid fa-check"></i>
+                          </button>
+
+                          <button class="btn-eliminar" title="Rechazar">
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>P002</td>
+
+                        <td>María Gómez</td>
+
+                        <td>R002</td>
+
+                        <td>22/07/2026</td>
+
+                        <td>Transferencia</td>
+
+                        <td>$360.000</td>
+
+                        <td>
+                          <span class="estado mantenimiento"> Pendiente </span>
+                        </td>
+
+                        <td>
+                          <button class="btn-ver" title="Ver comprobante">
+                            <i class="fa-solid fa-eye"></i>
+                          </button>
+
+                          <button class="btn-editar" title="Confirmar">
+                            <i class="fa-solid fa-check"></i>
+                          </button>
+
+                          <button class="btn-eliminar" title="Rechazar">
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <!--==================================================
+                        REPORTES
+            ==================================================-->
+
+            <section class="contenedor" id="reportes">
+              <div class="page-header">
+                <h2>Reportes del Sistema</h2>
+              </div>
+
+              <div class="page-body">
+                <!--====================================
+                TARJETAS
+        =====================================-->
+
+                <div class="dashboard-cards">
+                  <div class="card-dashboard">
+                    <i class="fa-solid fa-car"></i>
+
+                    <h3>Vehículos</h3>
+
+                    <h1>48</h1>
+
+                    <p>Total registrados</p>
+                  </div>
+
+                  <div class="card-dashboard">
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                    <h3>Reservas</h3>
+
+                    <h1>16</h1>
+
+                    <p>Este mes</p>
+                  </div>
+
+                  <div class="card-dashboard">
+                    <i class="fa-solid fa-users"></i>
+
+                    <h3>Clientes</h3>
+
+                    <h1>31</h1>
+
+                    <p>Registrados</p>
+                  </div>
+
+                  <div class="card-dashboard">
+                    <i class="fa-solid fa-dollar-sign"></i>
+
+                    <h3>Ingresos</h3>
+
+                    <h1>$8.450.000</h1>
+
+                    <p>Mes actual</p>
+                  </div>
+                </div>
+
+                <!--====================================
+                GRÁFICAS
+        =====================================-->
+
+                <div class="grafica-contenedor">
+                  <h3>Actividad mensual</h3>
+
+                  <div class="grafica-placeholder">
+                    <i class="fa-solid fa-chart-column"></i>
+
+                    <p>
+                      Aquí se mostrará la gráfica cuando el sistema esté conectado a la base de
+                      datos.
+                    </p>
+                  </div>
+                </div>
+
+                <!--====================================
+                RESUMEN
+        =====================================-->
+
+                <div class="grafica-contenedor">
+                  <h3>Resumen General</h3>
+
+                  <ul class="lista-resumen">
+                    <li>Vehículos disponibles: 35</li>
+
+                    <li>Vehículos alquilados: 10</li>
+
+                    <li>Vehículos en mantenimiento: 3</li>
+
+                    <li>Reservas pendientes: 5</li>
+
+                    <li>Pagos pendientes: 2</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <!--==================================================
+                    CONFIGURACIÓN
+            ==================================================-->
+
+            <section class="contenedor" id="configuracion">
+              <div class="page-header">
+                <h2>Configuración del Sistema</h2>
+              </div>
+
+              <div class="page-body">
+                <form class="crud-form">
+                  <div class="form-grid">
+                    <div class="input-group">
+                      <label for="nombreEmpresa"> Nombre de la empresa </label>
+
+                      <input type="text" id="nombreEmpresa" value="Zynco" />
+                    </div>
+
+                    <div class="input-group">
+                      <label for="correoEmpresa"> Correo electrónico </label>
+
+                      <input type="email" id="correoEmpresa" value="contacto@zynco.com" />
+                    </div>
+
+                    <div class="input-group">
+                      <label for="telefonoEmpresa"> Teléfono </label>
+
+                      <input type="text" id="telefonoEmpresa" value="300 123 4567" />
+                    </div>
+
+                    <div class="input-group">
+                      <label for="direccionEmpresa"> Dirección </label>
+
+                      <input type="text" id="direccionEmpresa" value="Bogotá D.C." />
+                    </div>
+
+                    <div class="input-group">
+                      <label for="monedaSistema"> Moneda </label>
+
+                      <select id="monedaSistema">
+                        <option selected>Peso Colombiano (COP)</option>
+
+                        <option>Dólar (USD)</option>
+
+                        <option>Euro (EUR)</option>
+                      </select>
+                    </div>
+
+                    <div class="input-group">
+                      <label for="temaSistema"> Tema </label>
+
+                      <select id="temaSistema">
+                        <option selected>Oscuro</option>
+
+                        <option>Claro</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <button type="button" class="btn-registrar">
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Guardar cambios
+                  </button>
+                </form>
+              </div>
+            </section>
+
+            <!--==========================================================
+                    MODAL GENERAL
+===========================================================-->
+
+            <div id="modal" class="modal">
+              <!--
+        Ventana reutilizable.
+
+        Se utilizará para:
+
+        • Nuevo vehículo
+        • Editar vehículo
+        • Nuevo cliente
+        • Nueva reserva
+        • Confirmaciones
+
+        No eliminar.
+    -->
+            </div>
+
+            <!--==========================================================
+                NOTIFICACIONES
+===========================================================-->
+
+            <div id="notificaciones">
+              <!--
+        Aquí aparecerán:
+
+        ✔ Guardado correctamente
+
+        ✖ Error
+
+        ⚠ Advertencias
+
+        Todo será generado desde JavaScript.
+    -->
+            </div>
+          </section>
+          <!-- fin de la sección "contenidoPrincipal" -->
+        </main>
+        <!-- fin de <main id="principal"> -->
+      </section>
+      <!-- fin de <section id="dashboard"> -->
+    </div>
+    <!-- fin de <div id="panel-admin"> -->
+
+    <!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
+
+    <div id="panel-cliente">
+      <!--==========================================================
+                    PANEL USUARIO
+===========================================================-->
+
+      <aside class="sidebar" id="sidebarUser">
+        <div class="sidebar-logo">
+          <img src="img/icon_zynco.png" alt="Logo Zynco" />
+
+          <h2>Zynco</h2>
+        </div>
+
+        <nav class="sidebar-menu">
+          <button class="menu activo" data-user="inicioUsuario">
+            <i class="fa-solid fa-house"></i>
+
+            <span>Inicio</span>
+          </button>
+
+          <button class="menu" data-user="reservarVehiculo">
+            <i class="fa-solid fa-car-side"></i>
+
+            <span>Reservar</span>
+          </button>
+
+          <button class="menu" data-user="misReservas">
+            <i class="fa-solid fa-calendar-check"></i>
+
+            <span>Mis reservas</span>
+          </button>
+
+          <button class="menu" data-user="misPagos">
+            <i class="fa-solid fa-credit-card"></i>
+
+            <span>Mis pagos</span>
+          </button>
+
+          <button class="menu" data-user="miPerfil">
+            <i class="fa-solid fa-user"></i>
+
+            <span>Mi perfil</span>
+          </button>
+
+          <button class="menu" data-user="configuracionUsuario">
+            <i class="fa-solid fa-gear"></i>
+
+            <span>Configuración</span>
+          </button>
+        </nav>
+
+        <button id="cerrarSesionUsuario" class="cerrar-sesion">
+          <i class="fa-solid fa-right-from-bracket"></i>
+
+          <span> Cerrar sesión </span>
+        </button>
+      </aside>
+
+      <!--==========================================================
+                    CONTENIDO
+===========================================================-->
+
+      <main class="principal">
+        <header class="header">
+          <div class="header-left">
+            <h1>Portal del Cliente</h1>
+          </div>
+
+          <div class="usuario">
+            <i class="fa-solid fa-user"></i>
+
+            <span> Usuario </span>
+          </div>
+        </header>
+
+        <section class="toolbar"></section>
+
+        <section class="contenido">
+          <!--==================================================
+                        INICIO
+        ==================================================-->
+
+          <section class="contenedor" id="inicioUsuario">
+            <div class="page-header">
+              <h2>¡Bienvenido a Zynco!</h2>
+
+              <p>
+                Nos alegra tenerte nuevamente. Desde aquí podrás gestionar tus reservas, consultar
+                tus pagos y actualizar tu información personal.
+              </p>
+            </div>
+
+            <div class="dashboard-grid">
+              <div class="card-resumen">
+                <i class="fa-solid fa-car"></i>
+
+                <h3>Vehículo actual</h3>
+
+                <span> Ninguno </span>
+              </div>
+
+              <div class="card-resumen">
+                <i class="fa-solid fa-calendar-days"></i>
+
+                <h3>Próxima reserva</h3>
+
+                <span> Sin reservas </span>
+              </div>
+
+              <div class="card-resumen">
+                <i class="fa-solid fa-credit-card"></i>
+
+                <h3>Último pago</h3>
+
+                <span> $0 </span>
+              </div>
+
+              <div class="card-resumen">
+                <i class="fa-solid fa-circle-check"></i>
+
+                <h3>Estado</h3>
+
+                <span class="estado activo"> Cuenta activa </span>
+              </div>
+            </div>
+
+            <div class="tarjeta">
+              <h3>Próximas reservas</h3>
+
+              <table class="tabla-zynco">
+                <thead>
+                  <tr>
+                    <th>Vehículo</th>
+
+                    <th>Entrega</th>
+
+                    <th>Devolución</th>
+
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td colspan="4">No tienes reservas programadas.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!--==================================================
+                RESERVAR VEHÍCULO
+===================================================-->
+
+          <section class="contenedor" id="reservarVehiculo">
+            <div class="page-header">
+              <h2>Reservar vehículo</h2>
+
+              <p>
+                Selecciona el vehículo que deseas alquilar y completa la información de tu reserva.
+              </p>
+            </div>
+
+            <div class="formulario-crud">
+              <div class="grupo-formulario">
+                <div class="campo">
+                  <label> Tipo de vehículo </label>
+
+                  <select id="tipoVehiculo">
+                    <option>Seleccione...</option>
+
+                    <option>Carro</option>
+
+                    <option>Moto</option>
+                  </select>
+                </div>
+
+                <div class="campo">
+                  <label> Vehículo </label>
+
+                  <select id="vehiculo">
+                    <option>Seleccione un vehículo</option>
+
+                    <option>Mazda 3 Touring</option>
+
+                    <option>Toyota Corolla</option>
+
+                    <option>Yamaha FZ25</option>
+                  </select>
+                </div>
+
+                <div class="campo">
+                  <label> Fecha de entrega </label>
+
+                  <input type="date" />
+                </div>
+
+                <div class="campo">
+                  <label> Hora de entrega </label>
+
+                  <input type="time" />
+                </div>
+
+                <div class="campo">
+                  <label> Fecha de devolución </label>
+
+                  <input type="date" />
+                </div>
+
+                <div class="campo">
+                  <label> Hora de devolución </label>
+
+                  <input type="time" />
+                </div>
+
+                <div class="campo">
+                  <label> Seguro </label>
+
+                  <select>
+                    <option>Sin seguro</option>
+
+                    <option>Seguro básico</option>
+
+                    <option>Seguro premium</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="tarjeta">
+              <h3>Vista previa del vehículo</h3>
+
+              <div class="preview-vehiculo">
+                <img src="img/vehiculo_demo.png" alt="Vehículo" class="imagen-preview" />
+
+                <div class="info-preview">
+                  <p><strong>Marca:</strong> Mazda</p>
+
+                  <p><strong>Modelo:</strong> 3 Touring</p>
+
+                  <p><strong>Año:</strong> 2025</p>
+
+                  <p><strong>Color:</strong> Negro</p>
+
+                  <p><strong>Precio por día:</strong> $150.000</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="tarjeta">
+              <h3>Condiciones del alquiler</h3>
+
+              <textarea rows="6" readonly>
+
+• El vehículo deberá entregarse en la fecha y hora acordadas.
+
+• El combustible deberá devolverse en las mismas condiciones de entrega.
+
+• El usuario será responsable por los daños ocasionados durante el alquiler.
+
+• Al confirmar la reserva acepta los términos y condiciones de Zynco.
+
+        </textarea>
+
+              <div style="margin-top: 20px">
+                <label>
+                  <input type="checkbox" />
+
+                  He leído y acepto las condiciones del servicio.
+                </label>
+              </div>
+            </div>
+
+            <div class="tarjeta">
+              <h3>Resumen de la reserva</h3>
+
+              <table class="tabla-zynco">
+                <tbody>
+                  <tr>
+                    <td>Vehículo</td>
+
+                    <td>Mazda 3 Touring</td>
+                  </tr>
+
+                  <tr>
+                    <td>Duración</td>
+
+                    <td>3 días</td>
+                  </tr>
+
+                  <tr>
+                    <td>Seguro</td>
+
+                    <td>Básico</td>
+                  </tr>
+
+                  <tr>
+                    <td>Total estimado</td>
+
+                    <td>
+                      <strong>$450.000</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="botones-formulario">
+              <button class="btn-registrar">Reservar vehículo</button>
+            </div>
+          </section>
+
+          <!--==================================================
+                    MIS RESERVAS
+===================================================-->
+
+          <section class="contenedor" id="misReservas">
+            <div class="page-header">
+              <h2>Mis reservas</h2>
+
+              <p>Consulta el historial y el estado de todas tus reservas.</p>
+            </div>
+
+            <div class="busqueda-crud">
+              <input type="text" placeholder="Buscar por vehículo o estado..." />
+
+              <button class="btn-buscar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                Buscar
+              </button>
+            </div>
+
+            <div class="page-body">
+              <div class="tabla-contenedor">
+                <table class="tabla-zynco">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+
+                      <th>Vehículo</th>
+
+                      <th>Entrega</th>
+
+                      <th>Devolución</th>
+
+                      <th>Total</th>
+
+                      <th>Estado</th>
+
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr>
+                      <td>R001</td>
+
+                      <td>Mazda 3 Touring</td>
+
+                      <td>18/07/2026</td>
+
+                      <td>21/07/2026</td>
+
+                      <td>$450.000</td>
+
+                      <td>
+                        <span class="estado confirmada"> Confirmada </span>
+                      </td>
+
+                      <td>
+                        <button class="btn-info">
+                          <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                        <button class="btn-eliminar">
+                          <i class="fa-solid fa-xmark"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>R002</td>
+
+                      <td>Yamaha FZ25</td>
+
+                      <td>26/07/2026</td>
+
+                      <td>29/07/2026</td>
+
+                      <td>$240.000</td>
+
+                      <td>
+                        <span class="estado pendiente"> Pendiente </span>
+                      </td>
+
+                      <td>
+                        <button class="btn-info">
+                          <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                        <button class="btn-eliminar">
+                          <i class="fa-solid fa-xmark"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>R003</td>
+
+                      <td>Toyota Corolla</td>
+
+                      <td>02/06/2026</td>
+
+                      <td>06/06/2026</td>
+
+                      <td>$620.000</td>
+
+                      <td>
+                        <span class="estado finalizada"> Finalizada </span>
+                      </td>
+
+                      <td>
+                        <button class="btn-info">
+                          <i class="fa-solid fa-eye"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!--==================================================
+                    MIS PAGOS
+===================================================-->
+
+          <section class="contenedor" id="misPagos">
+            <div class="page-header">
+              <h2>Mis pagos</h2>
+
+              <p>Consulta el historial de pagos realizados por tus reservas.</p>
+            </div>
+
+            <div class="busqueda-crud">
+              <input type="text" placeholder="Buscar por reserva o método de pago..." />
+
+              <button class="btn-buscar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                Buscar
+              </button>
+            </div>
+
+            <div class="page-body">
+              <div class="tabla-contenedor">
+                <table class="tabla-zynco">
+                  <thead>
+                    <tr>
+                      <th>Factura</th>
+
+                      <th>Reserva</th>
+
+                      <th>Fecha</th>
+
+                      <th>Método</th>
+
+                      <th>Valor</th>
+
+                      <th>Estado</th>
+
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr>
+                      <td>F001</td>
+
+                      <td>R001</td>
+
+                      <td>17/07/2026</td>
+
+                      <td>Tarjeta</td>
+
+                      <td>$450.000</td>
+
+                      <td>
+                        <span class="estado pagado"> Pagado </span>
+                      </td>
+
+                      <td>
+                        <button class="btn-info">
+                          <i class="fa-solid fa-file-lines"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>F002</td>
+
+                      <td>R002</td>
+
+                      <td>25/07/2026</td>
+
+                      <td>PSE</td>
+
+                      <td>$240.000</td>
+
+                      <td>
+                        <span class="estado pendiente"> Pendiente </span>
+                      </td>
+
+                      <td>
+                        <button class="btn-info">
+                          <i class="fa-solid fa-file-lines"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>F003</td>
+
+                      <td>R003</td>
+
+                      <td>01/06/2026</td>
+
+                      <td>Efectivo</td>
+
+                      <td>$620.000</td>
+
+                      <td>
+                        <span class="estado pagado"> Pagado </span>
+                      </td>
+
+                      <td>
+                        <button class="btn-info">
+                          <i class="fa-solid fa-file-lines"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!--==================================================
+                    MI PERFIL
+===================================================-->
+
+          <section class="contenedor" id="miPerfil">
+            <div class="page-header">
+              <h2>Mi perfil</h2>
+
+              <p>Administra tu información personal y mantén tus datos actualizados.</p>
+            </div>
+
+            <div class="formulario-crud">
+              <div class="grupo-formulario">
+                <div class="campo">
+                  <label> Nombre completo </label>
+
+                  <input type="text" value="Juan Pérez" />
+                </div>
+
+                <div class="campo">
+                  <label> Documento </label>
+
+                  <input type="text" value="1000123456" />
+                </div>
+
+                <div class="campo">
+                  <label> Correo electrónico </label>
+
+                  <input type="email" value="juan@email.com" />
+                </div>
+
+                <div class="campo">
+                  <label> Teléfono </label>
+
+                  <input type="text" value="3001234567" />
+                </div>
+
+                <div class="campo">
+                  <label> Ciudad </label>
+
+                  <input type="text" value="Bogotá" />
+                </div>
+
+                <div class="campo">
+                  <label> Dirección </label>
+
+                  <input type="text" value="Cra 00 #00-00" />
+                </div>
+
+                <div class="campo">
+                  <label> Usuario </label>
+
+                  <input type="text" value="usuario" readonly />
+                </div>
+
+                <div class="campo">
+                  <label> Estado de la cuenta </label>
+
+                  <input type="text" value="Activa" readonly />
+                </div>
+              </div>
+
+              <div class="botones-formulario">
+                <button class="btn-registrar">
+                  <i class="fa-solid fa-floppy-disk"></i>
+
+                  Guardar cambios
+                </button>
+
+                <button class="btn-editar">
+                  <i class="fa-solid fa-key"></i>
+
+                  Cambiar contraseña
+                </button>
+              </div>
+            </div>
+
+            <div class="tarjeta">
+              <h3>Información de la cuenta</h3>
+
+              <table class="tabla-zynco">
+                <tbody>
+                  <tr>
+                    <td>Fecha de registro</td>
+
+                    <td>15/03/2026</td>
+                  </tr>
+
+                  <tr>
+                    <td>Reservas realizadas</td>
+
+                    <td>8</td>
+                  </tr>
+
+                  <tr>
+                    <td>Reservas activas</td>
+
+                    <td>1</td>
+                  </tr>
+
+                  <tr>
+                    <td>Total pagado</td>
+
+                    <td>$3.260.000</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!--==================================================
+                CONFIGURACIÓN
+===================================================-->
+
+          <section class="contenedor" id="configuracionUsuario">
+            <div class="page-header">
+              <h2>Configuración</h2>
+
+              <p>Personaliza tu experiencia dentro de Zynco.</p>
+            </div>
+
+            <div class="formulario-crud">
+              <div class="grupo-formulario">
+                <div class="campo">
+                  <label> Tema </label>
+
+                  <select id="temaUsuario">
+                    <option>Oscuro</option>
+
+                    <option>Claro</option>
+
+                    <option>Automático</option>
+                  </select>
+                </div>
+
+                <div class="campo">
+                  <label> Idioma </label>
+
+                  <select>
+                    <option>Español</option>
+
+                    <option>English</option>
+                  </select>
+                </div>
+
+                <div class="campo">
+                  <label> Notificaciones por correo </label>
+
+                  <select>
+                    <option>Activadas</option>
+
+                    <option>Desactivadas</option>
+                  </select>
+                </div>
+
+                <div class="campo">
+                  <label> Recordatorios de reservas </label>
+
+                  <select>
+                    <option>Activados</option>
+
+                    <option>Desactivados</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="botones-formulario">
+                <button class="btn-registrar">
+                  <i class="fa-solid fa-floppy-disk"></i>
+
+                  Guardar configuración
+                </button>
+              </div>
+            </div>
+
+            <div class="tarjeta">
+              <h3>Seguridad</h3>
+
+              <table class="tabla-zynco">
+                <tbody>
+                  <tr>
+                    <td>Último inicio de sesión</td>
+
+                    <td>Hoy - 08:32 PM</td>
+                  </tr>
+
+                  <tr>
+                    <td>Dispositivo</td>
+
+                    <td>Windows 11 - Google Chrome</td>
+                  </tr>
+
+                  <tr>
+                    <td>Estado de la cuenta</td>
+
+                    <td>
+                      <span class="estado activo"> Activa </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="botones-formulario">
+              <button id="cerrarSesionUsuario2" class="btn-eliminar">
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Cerrar sesión
+              </button>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+    <!-- fin de <div id="panel-cliente"> -->
+
+    <!--==========================================================
+                    FOOTER
+===========================================================-->
+
+    <footer id="footer">
+      <span> Zynco © 2026 </span>
+    </footer>
+
+    <!--==========================================================
+                JAVASCRIPT
+===========================================================-->
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
